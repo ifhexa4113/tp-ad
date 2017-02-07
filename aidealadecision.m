@@ -55,13 +55,20 @@ function [] = aidealadecision()
     
     % Responsable Personnel
     display('Responsable Personnel');
-    f_responsablepersonnel = responsableatelier();
-    [b_pers] = responsablepersonnel(b, 1500, 1500);
+    ANS = zeros(389,3);
+    for nb_min_produits=1:1:389
+        [A_pers, b_pers, f_responsablepersonnel] = responsablepersonnel(A, b, nb_min_produits);
     
-    display('Répartitions des produits');
-    ans_responsablepersonnel = linprog(-f_responsablepersonnel,A,b_pers,[],[],lb)
-    
-    display('Limitation usage machine 1 et 3');
-    f_responsablepersonnel*ans_responsablepersonnel 
+        ans_responsablepersonnel = linprog(f_responsablepersonnel,A_pers,b_pers,[],[],lb);
+        
+        ANS(nb_min_produits,1) = 18 * ans_responsablepersonnel(1) + 5 * ans_responsablepersonnel(2) + 5 * ans_responsablepersonnel(4) + 10 * ans_responsablepersonnel(6);
+        ANS(nb_min_produits,2) = 8 * ans_responsablepersonnel(1) + 1 * ans_responsablepersonnel(2) + 11 * ans_responsablepersonnel(3) + 10 * ans_responsablepersonnel(5) + 25 * ans_responsablepersonnel(6);
+        ANS(nb_min_produits,3) = ANS(nb_min_produits,1) + ANS(nb_min_produits,2); 
+    end
+    plot(ANS)
+    title('Utilisation des machines 1 et 3 en fonction de la production minimum')
+    xlabel('Production minimum imposée en nombre total de produits')
+    ylabel('Utilisation des machines en minutes par semaines')
+    legend('Machine 1', 'Machine 3', 'Machines 1 et 3')
     
 end
