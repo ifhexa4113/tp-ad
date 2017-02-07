@@ -29,18 +29,35 @@ function [] = aidealadecision()
     ans_responsableatelier = linprog(-f_responsableatelier,A,b,[],[],lb)
     
     display('Nombre maximum de produits possibles');
-    f_responsableatelier*ans_responsableatelier
-    
+    ans_max = f_responsableatelier*ans_responsableatelier
     
     % Responsable Stocks
     display('Responsable Stocks');
     f_responsablestocks = responsablestocks();
     
     display('Répartitions des produits');
-    ans_responsablestocks = linprog(-f_responsablestocks,A,b,[],[],lb)
+    ans_responsablestocks = linprog(-f_responsablestocks,A,b,[],[],lb) % Maximiser
     
     display('Nombre maximum de produits possibles')
     f_responsablestocks*ans_responsablestocks
+    
+    display('Nombre minimum de produits possibles selon la quantité produite')
+    ans_responsablestocksmin = zeros(ceil(ans_max));
+    for i=1:ceil(ans_max)
+        Aeq = [1 1 1 1 1 1];
+        beq = [i];
+        
+        Abis = [A
+                -1 -1 -1 -1 -1 -1];
+        bbis = [b -i];  % PS: même résultat avec Aeq & Beq
+        
+        [answer, ~, exitflag] = linprog(f_responsablestocks,Abis,bbis,[],[],lb); % Minimiser
+        
+        if exitflag == 1
+            ans_responsablestocksmin(i) = f_responsablestocks*answer;
+        end
+    end
+    plot(ans_responsablestocksmin);
     
     % Comptable
     display('Comptable');
