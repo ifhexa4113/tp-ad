@@ -42,6 +42,15 @@ function [] = aidealadecision()
     display('Nombre maximum de produits possibles');
     f_responsablestocks*ans_responsablestocks
     
+    % Responsable Commercial
+    display('Responsable Commercial');
+    f_responsableatelier_com = responsableatelier();
+    [A_com, b_com] = responsablecommercial(A, b, 5);
     
+    display('Répartitions des produits');
+    ans_responsablecommercial = linprog(-f_responsableatelier_com,A_com,b_com,[],[],lb)
+    
+    display('Equilibre entre familles de produits');
+    f_responsableatelier_com*ans_responsablecommercial 
     
 end
