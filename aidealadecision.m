@@ -32,4 +32,16 @@ function [] = aidealadecision()
     f_responsableatelier*ans_responsableatelier
     
     
+    % Responsable Stocks
+    display('Responsable Stocks');
+    f_responsablestocks = responsablestocks();
+    
+    display('Répartitions des produits');
+    ans_responsablestocks = linprog(-f_responsablestocks,A,b,[],[],lb)
+    
+    display('Nombre maximum de produits possibles');
+    f_responsablestocks*ans_responsablestocks
+    
+    
+    
 end
