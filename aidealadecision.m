@@ -18,6 +18,18 @@ function [] = aidealadecision()
     PrixAchatMP          = [2 4 1];
     
     CoutHoraire          = [1 3 1 4 2 3 1];
-
+    
+    [A, b, lb] = contraintes();
+    
+    % Responsable Atelier
+    display('Responsable Atelier');
+    f_responsableatelier = responsableatelier();
+    
+    display('Répartitions des produits');
+    ans_responsableatelier = linprog(-f_responsableatelier,A,b,[],[],lb)
+    
+    display('Nombre maximum de produits possibles');
+    f_responsableatelier*ans_responsableatelier
+    
     
 end

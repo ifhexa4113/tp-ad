@@ -1,4 +1,4 @@
-function [] = contraintes()
+function [A, b, lb] = contraintes()
 
 A = [18  5  0  5  0 10
      17  2 12 15  7 12
