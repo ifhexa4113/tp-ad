@@ -39,9 +39,17 @@ function [] = aidealadecision()
     display('Répartitions des produits');
     ans_responsablestocks = linprog(-f_responsablestocks,A,b,[],[],lb)
     
-    display('Nombre maximum de produits possibles');
+    display('Nombre maximum de produits possibles')
     f_responsablestocks*ans_responsablestocks
     
+    % Comptable
+    display('Comptable');
+    f_comptable = comptable(PrixVente, QuantiteMPProduit, TempsUnitaireUsinage, CoutHoraire, PrixAchatMP)
     
+    display('Répartitions des produits');
+    ans_comptable = linprog(-f_comptable,A,b,[],[],lb)
+    
+    display('Nombre maximum de produits possibles')
+    f_comptable*ans_comptable
     
 end
