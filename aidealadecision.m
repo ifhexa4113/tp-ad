@@ -101,12 +101,12 @@ function [] = aidealadecision()
     Functions(4, :) = f_responsablecommercial;
     
     vector_responsablecommercial = zeros(389,1);
-    for eps=0:1:389
+    for eps=1:1:389
         [A_com, b_com] = responsablecommercial(A, b, eps);
         ans_responsablecommercial = linprog(-f_responsablecommercial,A_com,b_com,[],[],lb);
         vector_responsablecommercial(eps, 1) = f_responsablecommercial*ans_responsablecommercial;
     
-        if eps == 0
+        if eps == 1
            Solutions(:, 4) = ans_responsablecommercial;
         end
     end
@@ -142,4 +142,8 @@ function [] = aidealadecision()
     ylabel('Utilisation des machines en minutes par semaines')
     legend('Machine 1', 'Machine 3', 'Machines 1 et 3')
     
+    display('Matrice de gains');
+    Functions
+    Solutions
+    Gains = (Functions * Solutions).'
 end
