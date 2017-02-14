@@ -19,6 +19,8 @@ function [] = aidealadecision()
     
     CoutHoraire          = [1 3 1 4 2 3 1];
     
+    options = optimset('Display','none');
+    
     [A, b, lb] = contraintes();
     
     Solutions = zeros(6, 5);
@@ -34,7 +36,7 @@ function [] = aidealadecision()
     Functions(1, :) = f_comptable;
     
     display('Répartitions des produits');
-    ans_comptable = linprog(-f_comptable,A,b,[],[],lb);
+    ans_comptable = linprog(-f_comptable,A,b,[],[],lb,[],[],options);
     ans_comptable
     
     %%% EXEMPLE: remplir ca avec votre solution: un point dans un espace à
@@ -50,7 +52,7 @@ function [] = aidealadecision()
     Functions(2, :) = f_responsableatelier;
     
     display('Répartitions des produits');
-    ans_responsableatelier = linprog(-f_responsableatelier,A,b,[],[],lb);
+    ans_responsableatelier = linprog(-f_responsableatelier,A,b,[],[],lb,[],[],options);
     ans_responsableatelier
     
     Solutions(:, 2) = ans_responsableatelier;
@@ -64,7 +66,7 @@ function [] = aidealadecision()
     Functions(3, :) = f_responsablestocks;
     
     display('Répartition pour le nombre maximum de produits');
-    ans_responsablestocks = linprog(-f_responsablestocks,A,b,[],[],lb); % Maximiser
+    ans_responsablestocks = linprog(-f_responsablestocks,A,b,[],[],lb,[],[],options); % Maximiser
     ans_responsablestocks
     
     display('Nombre maximum de produits possibles')
@@ -80,7 +82,7 @@ function [] = aidealadecision()
                 -1 -1 -1 -1 -1 -1];
         bbis = [b -i];  % PS: même résultat avec Aeq & Beq
         
-        [answer, ~, exitflag] = linprog(f_responsablestocks,Abis,bbis,[],[],lb); % Minimiser
+        [answer, ~, exitflag] = linprog(f_responsablestocks,Abis,bbis,[],[],lb,[],[],options); % Minimiser
         
         if exitflag == 1
             ans_responsablestocksmin(i) = f_responsablestocks*answer;
@@ -103,7 +105,7 @@ function [] = aidealadecision()
     vector_responsablecommercial = zeros(389,1);
     for eps=1:1:389
         [A_com, b_com] = responsablecommercial(A, b, eps);
-        ans_responsablecommercial = linprog(-f_responsablecommercial,A_com,b_com,[],[],lb);
+        ans_responsablecommercial = linprog(-f_responsablecommercial,A_com,b_com,[],[],lb,[],[],options);
         vector_responsablecommercial(eps, 1) = f_responsablecommercial*ans_responsablecommercial;
     
         if eps == 1
@@ -123,7 +125,7 @@ function [] = aidealadecision()
     for nb_min_produits=1:1:389
         [A_pers, b_pers, f_responsablepersonnel] = responsablepersonnel(A, b, nb_min_produits);
     
-        ans_responsablepersonnel = linprog(f_responsablepersonnel,A_pers,b_pers,[],[],lb);
+        ans_responsablepersonnel = linprog(f_responsablepersonnel,A_pers,b_pers,[],[],lb,[],[],options);
         
         if nb_min_produits == 330
            
@@ -142,6 +144,8 @@ function [] = aidealadecision()
     ylabel('Utilisation des machines en minutes par semaines')
     legend('Machine 1', 'Machine 3', 'Machines 1 et 3')
     
+    
+    %%% PARTIE 2 PROGRAMMATION LINEAIRE MULTICRITERE
     display('Matrice de gains');
     Functions
     Solutions
