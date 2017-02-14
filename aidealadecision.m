@@ -58,9 +58,11 @@ function [] = aidealadecision()
     % Responsable Stocks
     display('Responsable Stocks');
     f_responsablestocks = responsablestocks();
+    Functions(2, :) = f_responsablestocks;
     
-    display('Répartitions des produits');
-    ans_responsablestocks = linprog(-f_responsablestocks,A,b,[],[],lb) % Maximiser
+    display('Répartition pour le nombre maximum de produits');
+    ans_responsablestocks = linprog(-f_responsablestocks,A,b,[],[],lb); % Maximiser
+    ans_responsablestocks
     
     display('Nombre maximum de produits possibles')
     f_responsablestocks*ans_responsablestocks
@@ -87,7 +89,7 @@ function [] = aidealadecision()
     end
     plot(ans_responsablestocksmin);
     figure;
-    Solutions(1, 3) = 275;
+    Solutions(:, 2) = ans_stock;
     
     % Responsable Commercial
     display('Responsable Commercial');
