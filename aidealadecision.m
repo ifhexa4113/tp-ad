@@ -21,20 +21,29 @@ function [] = aidealadecision()
     
     [A, b, lb] = contraintes();
     
-    Solutions = zeros(1,5);
+    Solutions = zeros(6, 5);
     Gains = zeros(5, 5);
+    Functions = zeros(5, 6);
     
     % Comptable
     display('Comptable');
     f_comptable = comptable(PrixVente, QuantiteMPProduit, TempsUnitaireUsinage, CoutHoraire, PrixAchatMP)
     
+    %%% EXEMPLE: remplir ça avec votre fonction: un vecteur de dimension 6,
+    %%% chaque dimension représentant un produit
+    Functions(1, :) = f_comptable;
+    
     display('Répartitions des produits');
-    ans_comptable = linprog(-f_comptable,A,b,[],[],lb)
-    Solutions(1, 1) = sum(ans_comptable);
+    ans_comptable = linprog(-f_comptable,A,b,[],[],lb);
+    ans_comptable
+    
+    %%% EXEMPLE: remplir ca avec votre solution: un point dans un espace à
+    %%% 6 dimensions, chaque dimension représentant un produit
+    Solutions(:, 1) = ans_comptable;
     
     display('Bénéfice maximum')
     f_comptable*ans_comptable
-    
+        
     % Responsable Atelier
     display('Responsable Atelier');
     f_responsableatelier = responsableatelier();
@@ -70,6 +79,10 @@ function [] = aidealadecision()
         
         if exitflag == 1
             ans_responsablestocksmin(i) = f_responsablestocks*answer;
+        end
+        
+        if i == 275
+            ans_stock = answer;
         end
     end
     plot(ans_responsablestocksmin);
