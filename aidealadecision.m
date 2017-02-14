@@ -58,6 +58,7 @@ function [] = aidealadecision()
         end
     end
     plot(ans_responsablestocksmin);
+    figure;
     
     % Comptable
     display('Comptable');
@@ -72,13 +73,19 @@ function [] = aidealadecision()
     % Responsable Commercial
     display('Responsable Commercial');
     f_responsablecommercial = responsableatelier();
-    [A_com, b_com] = responsablecommercial(A, b, 5);
     
-    display('Répartitions des produits');
-    ans_responsablecommercial = linprog(-f_responsablecommercial,A_com,b_com,[],[],lb)
+    ans_responsablecommercial = zeros(389,1);
+    for eps=1:1:389
+        [A_com, b_com] = responsablecommercial(A, b, eps);
+        ans_responsablecommercial(eps, 1) = f_responsablecommercial*linprog(-f_responsablecommercial,A_com,b_com,[],[],lb);
+    end
     
-    display('Equilibre entre familles de produits');
-    f_responsablecommercial*ans_responsablecommercial
+    plot(ans_responsablecommercial);
+    title('Bénéfice en fonction de l équilibre des quantités faites par famille de produits')
+    xlabel('Ecart maximum des quantités faites par famille de produits')
+    ylabel('Bénéfice')
+    figure;
+    
     
     % Responsable Personnel
     display('Responsable Personnel');
@@ -92,7 +99,7 @@ function [] = aidealadecision()
         ANS(nb_min_produits,2) = 8 * ans_responsablepersonnel(1) + 1 * ans_responsablepersonnel(2) + 11 * ans_responsablepersonnel(3) + 10 * ans_responsablepersonnel(5) + 25 * ans_responsablepersonnel(6);
         ANS(nb_min_produits,3) = ANS(nb_min_produits,1) + ANS(nb_min_produits,2); 
     end
-    plot(ANS)
+    plot(ANS);
     title('Utilisation des machines 1 et 3 en fonction de la production minimum')
     xlabel('Production minimum imposée en nombre total de produits')
     ylabel('Utilisation des machines en minutes par semaines')
