@@ -48,8 +48,13 @@ function [] = aidealadecision()
     display('Responsable Atelier');
     f_responsableatelier = responsableatelier();
     
+    Functions(:, 2) = f_responsableatelier;
+    
     display('Répartitions des produits');
-    ans_responsableatelier = linprog(-f_responsableatelier,A,b,[],[],lb)
+    ans_responsableatelier = linprog(-f_responsableatelier,A,b,[],[],lb);
+    ans_responsableatelier
+    
+    Solutions(:,2) = ans_responsableatelier;
     
     display('Nombre maximum de produits possibles');
     ans_max = f_responsableatelier*ans_responsableatelier
@@ -95,19 +100,24 @@ function [] = aidealadecision()
     display('Responsable Commercial');
     f_responsablecommercial = responsableatelier();
     
-    ans_responsablecommercial = zeros(389,1);
-    for eps=1:1:389
+    Functions(:, 4) = f_responsablecommercial;
+    
+    vector_responsablecommercial = zeros(389,1);
+    for eps=0:1:389
         [A_com, b_com] = responsablecommercial(A, b, eps);
-        ans_responsablecommercial(eps, 1) = f_responsablecommercial*linprog(-f_responsablecommercial,A_com,b_com,[],[],lb);
+        ans_responsablecommercial = linprog(-f_responsablecommercial,A_com,b_com,[],[],lb);
+        vector_responsablecommercial(eps, 1) = f_responsablecommercial*ans_responsablecommercial;
+    
+        if eps == 0
+           Solutions(:, 4) = ans_responsablecommercial;
+        end
     end
     
-    plot(ans_responsablecommercial);
+    plot(vector_responsablecommercial);
     title('Bénéfice en fonction de l équilibre des quantités faites par famille de produits')
     xlabel('Ecart maximum des quantités faites par famille de produits')
     ylabel('Bénéfice')
     figure;
-    
-    Solutions(1, 4) = 376;
     
     % Responsable Personnel
     display('Responsable Personnel');
@@ -116,6 +126,13 @@ function [] = aidealadecision()
         [A_pers, b_pers, f_responsablepersonnel] = responsablepersonnel(A, b, nb_min_produits);
     
         ans_responsablepersonnel = linprog(f_responsablepersonnel,A_pers,b_pers,[],[],lb);
+        
+        if nb_min_produits == 330
+           
+            Functions(:, 5) = f_responsablepersonnel;
+            Solutions(:, 5) = ans_responsablepersonnel;
+            
+        end
         
         ANS(nb_min_produits,1) = 18 * ans_responsablepersonnel(1) + 5 * ans_responsablepersonnel(2) + 5 * ans_responsablepersonnel(4) + 10 * ans_responsablepersonnel(6);
         ANS(nb_min_produits,2) = 8 * ans_responsablepersonnel(1) + 1 * ans_responsablepersonnel(2) + 11 * ans_responsablepersonnel(3) + 10 * ans_responsablepersonnel(5) + 25 * ans_responsablepersonnel(6);
@@ -127,6 +144,4 @@ function [] = aidealadecision()
     ylabel('Utilisation des machines en minutes par semaines')
     legend('Machine 1', 'Machine 3', 'Machines 1 et 3')
     
-    Solutions(1, 5) = 330;
-    Solutions
 end
