@@ -21,6 +21,20 @@ function [] = aidealadecision()
     
     [A, b, lb] = contraintes();
     
+    Solutions = zeros(1,5);
+    Gains = zeros(5, 5);
+    
+    % Comptable
+    display('Comptable');
+    f_comptable = comptable(PrixVente, QuantiteMPProduit, TempsUnitaireUsinage, CoutHoraire, PrixAchatMP)
+    
+    display('Répartitions des produits');
+    ans_comptable = linprog(-f_comptable,A,b,[],[],lb)
+    Solutions(1, 1) = sum(ans_comptable);
+    
+    display('Bénéfice maximum')
+    f_comptable*ans_comptable
+    
     % Responsable Atelier
     display('Responsable Atelier');
     f_responsableatelier = responsableatelier();
@@ -30,6 +44,7 @@ function [] = aidealadecision()
     
     display('Nombre maximum de produits possibles');
     ans_max = f_responsableatelier*ans_responsableatelier
+    Solutions(1, 2) = ans_max;
     
     % Responsable Stocks
     display('Responsable Stocks');
@@ -44,8 +59,8 @@ function [] = aidealadecision()
     display('Nombre minimum de produits possibles selon la quantité produite')
     ans_responsablestocksmin = zeros(ceil(ans_max));
     for i=1:ceil(ans_max)
-        Aeq = [1 1 1 1 1 1];
-        beq = [i];
+        %Aeq = [1 1 1 1 1 1];
+        %beq = [i];
         
         Abis = [A
                 -1 -1 -1 -1 -1 -1];
@@ -59,16 +74,7 @@ function [] = aidealadecision()
     end
     plot(ans_responsablestocksmin);
     figure;
-    
-    % Comptable
-    display('Comptable');
-    f_comptable = comptable(PrixVente, QuantiteMPProduit, TempsUnitaireUsinage, CoutHoraire, PrixAchatMP)
-    
-    display('Répartitions des produits');
-    ans_comptable = linprog(-f_comptable,A,b,[],[],lb)
-    
-    display('Nombre maximum de produits possibles')
-    f_comptable*ans_comptable
+    Solutions(1, 3) = 275;
     
     % Responsable Commercial
     display('Responsable Commercial');
@@ -86,6 +92,7 @@ function [] = aidealadecision()
     ylabel('Bénéfice')
     figure;
     
+    Solutions(1, 4) = 376;
     
     % Responsable Personnel
     display('Responsable Personnel');
@@ -105,4 +112,6 @@ function [] = aidealadecision()
     ylabel('Utilisation des machines en minutes par semaines')
     legend('Machine 1', 'Machine 3', 'Machines 1 et 3')
     
+    Solutions(1, 5) = 330;
+    Solutions
 end
