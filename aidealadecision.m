@@ -150,4 +150,6 @@ function [] = aidealadecision()
     Functions
     Solutions
     Gains = (Functions * Solutions).'
+    
+    %ProgLineaireMult(Gains, Functions, Solutions, A, b, lb, options)
 end
