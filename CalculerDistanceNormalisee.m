@@ -2,7 +2,7 @@ function [ DistancesVector ] = CalculerDistanceNormalisee( Gains )
 
 Rows = size(Gains,1);
 Columns = size(Gains,2);
-Max = [10159 389 2016 389 7500]; % /!\ 8000 douteux
+Max = [10159 389 2016 10159 7500];
 DistancesVector = zeros(Rows,1);
 % Normalisation
 for i=1:1:Rows

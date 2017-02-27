@@ -6,7 +6,7 @@ DistancesVector = CalculerDistanceNormalisee(Gains);
 DistancesVector
 display('La solution qui minimise l utilisation des machines 1 et 3 est la plus proche de l optimum');
 
-Max = [10159 389 2016 389 7500];
+Max = [10159 389 2016 10159 7500];
 CritereDistance = zeros(1,5);
 for i=1:1:5
     CritereDistance(1,i) = abs(Optimum(i) - Gains(5,i)) / Max(i);

@@ -31,16 +31,16 @@ function [] = aidealadecision()
     display('Comptable');
     f_comptable = comptable(PrixVente, QuantiteMPProduit, TempsUnitaireUsinage, CoutHoraire, PrixAchatMP)
     
-    %%% EXEMPLE: remplir Ã§a avec votre fonction: un vecteur de dimension 6,
-    %%% chaque dimension reprÃ©sentant un produit
+    %%% EXEMPLE: remplir ça avec votre fonction: un vecteur de dimension 6,
+    %%% chaque dimension représentant un produit
     Functions(1, :) = f_comptable;
     
     display('Répartitions des produits');
     ans_comptable = linprog(-f_comptable,A,b,[],[],lb,[],[],options);
     ans_comptable
     
-    %%% EXEMPLE: remplir ca avec votre solution: un point dans un espace Ã 
-    %%% 6 dimensions, chaque dimension reprÃ©sentant un produit
+    %%% EXEMPLE: remplir ca avec votre solution: un point dans un espace à 
+    %%% 6 dimensions, chaque dimension représentant un produit
     Solutions(:, 1) = ans_comptable;
     
     display('Bénéfice maximum')
@@ -80,7 +80,7 @@ function [] = aidealadecision()
         
         Abis = [A
                 -f_comptable];
-        bbis = [b -i*100];  % PS: mÃªme rÃ©sultat avec Aeq & Beq
+        bbis = [b -i*100];  % PS: même résultat avec Aeq & Beq
         
         [answer, ~, exitflag] = linprog(f_responsablestocks,Abis,bbis,[],[],lb,[],[],options); % Minimiser
         
@@ -100,7 +100,7 @@ function [] = aidealadecision()
     
     % Responsable Commercial
     display('Responsable Commercial');
-    f_responsablecommercial = responsableatelier();
+    f_responsablecommercial = f_comptable;
     
     Functions(4, :) = f_responsablecommercial;
     
@@ -108,7 +108,7 @@ function [] = aidealadecision()
     for eps=1:1:389
         [A_com, b_com] = responsablecommercial(A, b, eps);
         ans_responsablecommercial = linprog(-f_responsablecommercial,A_com,b_com,[],[],lb,[],[],options);
-        vector_responsablecommercial(eps, 1) = Functions(1, :)*ans_responsablecommercial;
+        vector_responsablecommercial(eps, 1) = f_responsablecommercial*ans_responsablecommercial;
     
         if eps == 1
            Solutions(:, 4) = ans_responsablecommercial;
@@ -116,16 +116,16 @@ function [] = aidealadecision()
     end
     
     plot(vector_responsablecommercial);
-    title('Bénéfice en fonction de l équilibre des quantités faites par famille de produits')
     xlabel('Ecart maximum des quantités faites par famille de produits')
     ylabel('Bénéfice')
     figure;
     
     % Responsable Personnel
     display('Responsable Personnel');
-    ANS = zeros(10159,3);
+    pas = 10;
+    ANS = zeros(10160/pas,3);
     ben_found=0;
-    for ben_min=1:1:10159
+    for ben_min=10:pas:10160      
         [A_pers, b_pers, f_responsablepersonnel] = responsablepersonnel(A, b, ben_min, f_comptable);
     
         ans_responsablepersonnel = linprog(f_responsablepersonnel,A_pers,b_pers,[],[],lb,[],[],options);
@@ -133,17 +133,17 @@ function [] = aidealadecision()
         ANS(ben_min,1) = 18 * ans_responsablepersonnel(1) + 5 * ans_responsablepersonnel(2) + 5 * ans_responsablepersonnel(4) + 10 * ans_responsablepersonnel(6);
         
         if ANS(ben_min,1) >= 10 && ben_found == 0
-           % Point ou la machine 1 commence Ã  Ãªtre utilisÃ©e.
+           % Point ou la machine 1 commence à être utilisée.
            ben_found = 1;
            Functions(5, :) = f_responsablepersonnel;
            Solutions(:, 5) = ans_responsablepersonnel;
+           ben_min
         end
         
         ANS(ben_min,2) = 8 * ans_responsablepersonnel(1) + 1 * ans_responsablepersonnel(2) + 11 * ans_responsablepersonnel(3) + 10 * ans_responsablepersonnel(5) + 25 * ans_responsablepersonnel(6);
-        ANS(ben_min,3) = ANS(ben_min,1) + ANS(ben_min,2); 
+        ANS(ben_min,3) = ANS(ben_min,1) + ANS(ben_min,2);
     end
     plot(ANS);
-    title('Utilisation des machines 1 et 3 en fonction du bénéfice minimum')
     xlabel('Bénéfice minimum imposé')
     ylabel('Utilisation des machines en minutes par semaines')
     legend('Machine 1', 'Machine 3', 'Machines 1 et 3')
@@ -155,6 +155,6 @@ function [] = aidealadecision()
     Solutions
     Gains = (Functions * Solutions).'
     
-    %ProgLineaireMult(Gains, Functions, Solutions, A, b, lb, options)
+    ProgLineaireMult(Gains, Functions, Solutions, A, b, lb, options)
 end
 
