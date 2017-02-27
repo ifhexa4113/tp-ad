@@ -16,7 +16,7 @@ CritereDistance
 % On observe que le critère le moins respecté est la maximisation du
 % bénéfice.
 
-[A_pers, b_pers, f_responsablepersonnel] = responsablepersonnel(A, b, 330);
+[A_pers, b_pers, f_responsablepersonnel] = responsablepersonnel(A, b, 7960, Functions(1,:));
 
 X = zeros(10159-8017+1);
 Y = zeros(10159-8017+1);

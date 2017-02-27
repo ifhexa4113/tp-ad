@@ -141,12 +141,11 @@ function [] = aidealadecision()
         ANS(ben_min,3) = ANS(ben_min,1) + ANS(ben_min,2); 
     end
     plot(ANS);
-    title('Utilisation des machines 1 et 3 en fonction de la production minimum')
-    xlabel('Production minimum imposée en nombre total de produits')
+    title('Utilisation des machines 1 et 3 en fonction du bénéfice minimum')
+    xlabel('Bénéfice minimum imposé')
     ylabel('Utilisation des machines en minutes par semaines')
     legend('Machine 1', 'Machine 3', 'Machines 1 et 3')
-    
-    f_comptable
+    figure;
     
     %%% PARTIE 2 PROGRAMMATION LINEAIRE MULTICRITERE
     display('Matrice de gains');
