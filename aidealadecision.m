@@ -108,7 +108,7 @@ function [] = aidealadecision()
     for eps=1:1:389
         [A_com, b_com] = responsablecommercial(A, b, eps);
         ans_responsablecommercial = linprog(-f_responsablecommercial,A_com,b_com,[],[],lb,[],[],options);
-        vector_responsablecommercial(eps, 1) = f_responsablecommercial*ans_responsablecommercial;
+        vector_responsablecommercial(eps, 1) = Functions(1, :)*ans_responsablecommercial;
     
         if eps == 1
            Solutions(:, 4) = ans_responsablecommercial;
@@ -155,5 +155,5 @@ function [] = aidealadecision()
     Solutions
     Gains = (Functions * Solutions).'
     
-    %ProgLineaireMult(Gains, Functions, Solutions, A, b, lb, options)
+    ProgLineaireMult(Gains, Functions, Solutions, A, b, lb, options)
 end
