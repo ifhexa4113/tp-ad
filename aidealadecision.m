@@ -121,22 +121,24 @@ function [] = aidealadecision()
     
     % Responsable Personnel
     display('Responsable Personnel');
-    ANS = zeros(389,3);
-    for nb_min_produits=1:1:389
-        [A_pers, b_pers, f_responsablepersonnel] = responsablepersonnel(A, b, nb_min_produits);
+    ANS = zeros(10159,3);
+    ben_found=0;
+    for ben_min=1:1:10159
+        [A_pers, b_pers, f_responsablepersonnel] = responsablepersonnel(A, b, ben_min, f_comptable);
     
         ans_responsablepersonnel = linprog(f_responsablepersonnel,A_pers,b_pers,[],[],lb,[],[],options);
         
-        if nb_min_produits == 330
-           
-            Functions(5, :) = f_responsablepersonnel;
-            Solutions(:, 5) = ans_responsablepersonnel;
-            
+        ANS(ben_min,1) = 18 * ans_responsablepersonnel(1) + 5 * ans_responsablepersonnel(2) + 5 * ans_responsablepersonnel(4) + 10 * ans_responsablepersonnel(6);
+        
+        if ANS(ben_min,1) >= 10 && ben_found == 0
+           % Point ou la machine 1 commence à être utilisée.
+           ben_found = 1;
+           Functions(5, :) = f_responsablepersonnel;
+           Solutions(:, 5) = ans_responsablepersonnel;
         end
         
-        ANS(nb_min_produits,1) = 18 * ans_responsablepersonnel(1) + 5 * ans_responsablepersonnel(2) + 5 * ans_responsablepersonnel(4) + 10 * ans_responsablepersonnel(6);
-        ANS(nb_min_produits,2) = 8 * ans_responsablepersonnel(1) + 1 * ans_responsablepersonnel(2) + 11 * ans_responsablepersonnel(3) + 10 * ans_responsablepersonnel(5) + 25 * ans_responsablepersonnel(6);
-        ANS(nb_min_produits,3) = ANS(nb_min_produits,1) + ANS(nb_min_produits,2); 
+        ANS(ben_min,2) = 8 * ans_responsablepersonnel(1) + 1 * ans_responsablepersonnel(2) + 11 * ans_responsablepersonnel(3) + 10 * ans_responsablepersonnel(5) + 25 * ans_responsablepersonnel(6);
+        ANS(ben_min,3) = ANS(ben_min,1) + ANS(ben_min,2); 
     end
     plot(ANS);
     title('Utilisation des machines 1 et 3 en fonction de la production minimum')
@@ -144,10 +146,13 @@ function [] = aidealadecision()
     ylabel('Utilisation des machines en minutes par semaines')
     legend('Machine 1', 'Machine 3', 'Machines 1 et 3')
     
+    f_comptable
     
     %%% PARTIE 2 PROGRAMMATION LINEAIRE MULTICRITERE
     display('Matrice de gains');
     Functions
     Solutions
     Gains = (Functions * Solutions).'
+    
+    %ProgLineaireMult(Gains, Functions, Solutions, A, b, lb, options)
 end

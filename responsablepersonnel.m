@@ -1,9 +1,9 @@
-function [A, b, f] = responsablepersonnel( A, b, nb_min_produits )
+function [A, b, f] = responsablepersonnel( A, b, ben_min, f_comptable )
 
 A = [A
-     -1 -1 -1 -1 -1 -1];
+     -f_comptable];
  
-b = [b -nb_min_produits];
+b = [b -ben_min];
 
 f = [26 6 11 5 10 35];
 
