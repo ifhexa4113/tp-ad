@@ -134,7 +134,7 @@ function [] = aidealadecision()
            % Point ou la machine 1 commence à être utilisée.
            ben_found = 1;
            Functions(5, :) = f_responsablepersonnel;
-           Solutions(:, 5) = ans_reponsablepersonnel;
+           Solutions(:, 5) = ans_responsablepersonnel;
         end
         
         ANS(ben_min,2) = 8 * ans_responsablepersonnel(1) + 1 * ans_responsablepersonnel(2) + 11 * ans_responsablepersonnel(3) + 10 * ans_responsablepersonnel(5) + 25 * ans_responsablepersonnel(6);
@@ -146,6 +146,7 @@ function [] = aidealadecision()
     ylabel('Utilisation des machines en minutes par semaines')
     legend('Machine 1', 'Machine 3', 'Machines 1 et 3')
     
+    f_comptable
     
     %%% PARTIE 2 PROGRAMMATION LINEAIRE MULTICRITERE
     display('Matrice de gains');
