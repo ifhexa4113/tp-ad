@@ -44,7 +44,7 @@ function [] = aidealadecision()
     Solutions(:, 1) = ans_comptable;
     
     display('Bénéfice maximum')
-    f_comptable*ans_comptable
+    ans_max = f_comptable*ans_comptable
         
     % Responsable Atelier
     display('Responsable Atelier');
@@ -58,7 +58,7 @@ function [] = aidealadecision()
     Solutions(:, 2) = ans_responsableatelier;
     
     display('Nombre maximum de produits possibles');
-    ans_max = f_responsableatelier*ans_responsableatelier
+    f_responsableatelier*ans_responsableatelier
     
     % Responsable Stocks
     display('Responsable Stocks');
@@ -73,14 +73,14 @@ function [] = aidealadecision()
     f_responsablestocks*ans_responsablestocks
     
     display('Nombre minimum de produits possibles selon la quantité produite')
-    ans_responsablestocksmin = zeros(ceil(ans_max));
-    for i=1:ceil(ans_max)
+    ans_responsablestocksmin = zeros(ceil(ans_max/100));
+    for i=1:ceil(ans_max/100)
         %Aeq = [1 1 1 1 1 1];
         %beq = [i];
         
         Abis = [A
-                -1 -1 -1 -1 -1 -1];
-        bbis = [b -i];  % PS: même résultat avec Aeq & Beq
+                -f_comptable];
+        bbis = [b -i*100];  % PS: même résultat avec Aeq & Beq
         
         [answer, ~, exitflag] = linprog(f_responsablestocks,Abis,bbis,[],[],lb,[],[],options); % Minimiser
         
@@ -88,12 +88,14 @@ function [] = aidealadecision()
             ans_responsablestocksmin(i) = f_responsablestocks*answer;
         end
         
-        if i == 275
+        if i == 90
             ans_stock = answer;
         end
     end
     plot(ans_responsablestocksmin);
     figure;
+    display('Quantité de produits');
+    [1 1 1 1 1 1]*ans_stock
     Solutions(:, 3) = ans_stock;
     
     % Responsable Commercial
