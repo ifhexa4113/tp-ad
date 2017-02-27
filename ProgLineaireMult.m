@@ -39,7 +39,7 @@ for eps=1:1:1655
     end
     i = i+1;
 end
-display('Imposer un stock minimum de 1600 permet de ne pas trop dégrader les autres critères');
+display('Imposer un stock minimum de 1550 permet de ne pas trop dégrader les autres critères');
 
 plot(X, Y)
 xlabel('Niveau de stock')
@@ -100,6 +100,7 @@ b_pers = [b_pers -eps];
 
 [NouvelleRepartition,fval,exitflag] = linprog(-Functions(1,:),A_pers,b_pers,[],[],lb,[],[],options);
 NouveauxGains = (Functions*NouvelleRepartition)
+NouvelleRepartition
 
 
 CritereDistance = zeros(1,5);
@@ -112,7 +113,6 @@ SolutionDinstance = sqrt(CritereDistance(1)^2 + CritereDistance(2)^2 + CritereDi
 
 
 % MAXIMUM PRODUIT
-
 X = zeros(389-309+1);
 Y = zeros(389-309+1);
 i = 1;
@@ -135,6 +135,8 @@ plot(X, Y)
 xlabel('Nombre de produit fabriqué')
 ylabel('Ecart en distance euclidienne par rapport à l optimum')
 figure;
+
+
 
 end
 

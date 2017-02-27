@@ -123,9 +123,9 @@ function [] = aidealadecision()
     % Responsable Personnel
     display('Responsable Personnel');
     pas = 10;
-    ANS = zeros(10160/pas,3);
+    ANS = zeros(10160,3);
     ben_found=0;
-    for ben_min=10:pas:10160      
+    for ben_min=1:1:10160      
         [A_pers, b_pers, f_responsablepersonnel] = responsablepersonnel(A, b, ben_min, f_comptable);
     
         ans_responsablepersonnel = linprog(f_responsablepersonnel,A_pers,b_pers,[],[],lb,[],[],options);
