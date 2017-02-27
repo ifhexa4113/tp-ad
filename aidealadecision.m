@@ -102,7 +102,7 @@ function [] = aidealadecision()
     display('Responsable Commercial');
     f_responsablecommercial = f_comptable;
     
-    Functions(4, :) = f_responsablecommercial;
+    Functions(4, :) = [ 1 1 1 -1 -1 -1];
     
     vector_responsablecommercial = zeros(389,1);
     for eps=1:1:389
@@ -137,7 +137,6 @@ function [] = aidealadecision()
            ben_found = 1;
            Functions(5, :) = f_responsablepersonnel;
            Solutions(:, 5) = ans_responsablepersonnel;
-           ben_min
         end
         
         ANS(ben_min,2) = 8 * ans_responsablepersonnel(1) + 1 * ans_responsablepersonnel(2) + 11 * ans_responsablepersonnel(3) + 10 * ans_responsablepersonnel(5) + 25 * ans_responsablepersonnel(6);
@@ -153,7 +152,8 @@ function [] = aidealadecision()
     display('Matrice de gains');
     Functions
     Solutions
-    Gains = (Functions * Solutions).'
+    Gains = (Functions * Solutions).';
+    Gains = abs(Gains)
     
     ProgLineaireMult(Gains, Functions, Solutions, A, b, lb, options)
 end
